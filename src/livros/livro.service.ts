@@ -3,25 +3,23 @@ import { delay, of } from "rxjs";
 import { Livro } from "./livro.model";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LivroService {
-  
-  obterLivros(): Livro[] {
+  private obterLivros(): Livro[] {
     return [
       {
         id: 1,
-        nome: 'Harry Potter'
+        nome: 'Harry Potter',
       },
       {
         id: 2,
-        nome: 'Senhor do Aneis'
-      }
-    ]
+        nome: 'Senhor do Aneis',
+      },
+    ];
   }
 
-  obterLivrosApi(){
-    return of(this.obterLivros())
-      .pipe(delay(1000));
+  obterLivrosApi() {
+    return of(this.obterLivros()).pipe(delay(1000));
   }
 }

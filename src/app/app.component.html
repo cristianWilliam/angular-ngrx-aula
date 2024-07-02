@@ -6,3 +6,8 @@
   <input type="text" [(ngModel)]="livroInput">
   <button (click)="adicionar()"> Adicionar </button>
 </div>
+
+@for (livro of livros2$ | async; track $index) {
+    <p> {{ livro.nome }} </p>
+  }
+  

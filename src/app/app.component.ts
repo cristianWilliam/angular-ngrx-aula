@@ -2,42 +2,36 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { LivroService } from '../livros/livro.service';
-import { livroActions } from '../livros/state/livro.actions';
-import { livrosSelector } from '../livros/state/livro.selectors';
+import { LivroStateService } from '../livros/livro-state.service';
+import { Livro } from '../livros/livro.model';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [CommonModule, RouterOutlet, FormsModule],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
   title = 'angular-ngrx-aula';
-  
-  livroService = inject(LivroService);
-  store = inject(Store);
+  private livroStateService = inject(LivroStateService);
+  protected livros$ = this.livroStateService.escutarMudancasDeLivros();
 
-  livros$ = this.store.select(livrosSelector);
-  livroInput = '';
-  
+  private livroState2 = inject(LivroStateService);
+  protected livros2$ = this.livroState2.escutarMudancasDeLivros('H');
+
+  protected livroInput = '';
+
   ngOnInit(): void {
-    this.store.dispatch(livroActions.carregarLivros());
+    this.livroStateService.carregarLivros();
   }
 
-  adicionar(){
-    this.store.dispatch(livroActions.adicionarLivros(
-      {
-        id: 10,
-        nome: this.livroInput
-      }
-    ))
+  adicionar() {
+    const livro: Livro = {
+      id: 10,
+      nome: this.livroInput,
+    };
+
+    this.livroStateService.adicionarLivro(livro);
   }
-
-  // ngOnInit(): void {
-  //   this.livros = this.livroService.obterLivros();
-  // }
-
 }
